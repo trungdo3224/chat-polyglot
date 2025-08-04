@@ -68,7 +68,9 @@ export const ApiKeyManager = () => {
   };
 
   return (
-    <Card className="bg-card/50 backdrop-blur-sm border-border">
+    <Card className="bg-card/50 backdrop-blur-sm border-border animate-fade-in"
+      style={{ animationDelay: '200ms' }}
+    >
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Key className="w-5 h-5" />
