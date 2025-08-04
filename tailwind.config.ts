@@ -61,7 +61,33 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// LLM brand colors
+				openai: {
+					DEFAULT: 'hsl(var(--openai))',
+					bg: 'hsl(var(--openai-bg))'
+				},
+				gemini: {
+					DEFAULT: 'hsl(var(--gemini))',
+					bg: 'hsl(var(--gemini-bg))'
+				},
+				deepseek: {
+					DEFAULT: 'hsl(var(--deepseek))',
+					bg: 'hsl(var(--deepseek-bg))'
+				},
+				claude: {
+					DEFAULT: 'hsl(var(--claude))',
+					bg: 'hsl(var(--claude-bg))'
 				}
+			},
+			backgroundImage: {
+				'gradient-main': 'var(--gradient-main)'
+			},
+			boxShadow: {
+				'glow': 'var(--shadow-glow)'
+			},
+			transitionTimingFunction: {
+				'smooth': 'var(--transition-smooth)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
