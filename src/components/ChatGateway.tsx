@@ -8,6 +8,7 @@ import { Send, Bot, User, Settings } from "lucide-react";
 import { ModelSelector } from "./ModelSelector";
 import { ChatMessage } from "./ChatMessage";
 import { ApiKeyManager } from "./ApiKeyManager";
+import { TopicSelector, topics, Topic } from "./TopicSelector";
 
 interface Message {
   id: string;
@@ -35,6 +36,7 @@ export const ChatGateway = () => {
     claude: false,
   });
   const [showApiKeys, setShowApiKeys] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(topics[0]); // Default to first topic
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -55,14 +57,16 @@ export const ChatGateway = () => {
       .filter(([_, selected]) => selected)
       .map(([model, _]) => model);
 
-    // Simulate API calls for now
+    // Simulate API calls for now - using topic-specific prompts
     for (const model of selectedModelNames) {
       // Simulate delay
       await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
       
+      const topicPrompt = selectedTopic?.prompts[model as keyof typeof selectedTopic.prompts] || '';
+      
       const response: Message = {
         id: `${Date.now()}-${model}`,
-        content: `This is a response from ${model.toUpperCase()} model. I understand you asked: "${userMessage.content}". This is a simulated response until API keys are configured.`,
+        content: `[${model.toUpperCase()}] - Chủ đề: ${selectedTopic?.name}\n\nPrompt context: "${topicPrompt}"\n\nResponse to: "${userMessage.content}"\n\nĐây là phản hồi mô phỏng. Khi tích hợp API thực tế, AI sẽ phản hồi theo prompt được tối ưu cho chủ đề "${selectedTopic?.name}".`,
         sender: "assistant",
         model,
         timestamp: new Date(),
@@ -105,6 +109,11 @@ export const ChatGateway = () => {
       <div className="flex-1 flex max-w-6xl mx-auto w-full gap-4 p-4">
         {/* Sidebar */}
         <div className="w-80 space-y-4">
+          <TopicSelector
+            selectedTopic={selectedTopic}
+            onTopicChange={setSelectedTopic}
+          />
+          
           <ModelSelector
             selectedModels={selectedModels}
             onModelChange={setSelectedModels}
@@ -119,10 +128,18 @@ export const ChatGateway = () => {
         <div className="flex-1 flex flex-col">
           <Card className="flex-1 flex flex-col bg-card/50 backdrop-blur-sm border-border shadow-glow">
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2">
-                <Bot className="w-5 h-5" />
-                Multi-LLM Chat
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Bot className="w-5 h-5" />
+                  Multi-LLM Chat
+                </CardTitle>
+                {selectedTopic && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {selectedTopic.icon}
+                    <span>Chủ đề: {selectedTopic.name}</span>
+                  </div>
+                )}
+              </div>
             </CardHeader>
             
             <CardContent className="flex-1 flex flex-col p-0">
@@ -131,8 +148,8 @@ export const ChatGateway = () => {
                   {messages.length === 0 ? (
                     <div className="text-center text-muted-foreground py-12">
                       <Bot className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                      <p className="text-lg">Select your AI models and start chatting!</p>
-                      <p className="text-sm mt-2">Choose from OpenAI, Gemini, DeepSeek, and Claude</p>
+                      <p className="text-lg">Chọn chủ đề và AI models để bắt đầu!</p>
+                      <p className="text-sm mt-2">Mỗi chủ đề có prompt được tối ưu riêng cho từng AI</p>
                     </div>
                   ) : (
                     messages.map((message) => (
@@ -158,7 +175,7 @@ export const ChatGateway = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Ask multiple AI models anything..."
+                    placeholder="Hỏi các AI models bất cứ điều gì..."
                     className="flex-1 bg-input border-border"
                     disabled={isLoading}
                   />
@@ -174,7 +191,7 @@ export const ChatGateway = () => {
                 
                 {!Object.values(selectedModels).some(Boolean) && (
                   <p className="text-sm text-muted-foreground mt-2">
-                    Select at least one AI model to start chatting
+                    Chọn ít nhất một AI model để bắt đầu trò chuyện
                   </p>
                 )}
               </div>
