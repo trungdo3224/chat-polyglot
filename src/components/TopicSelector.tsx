@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Code, Briefcase, Lightbulb, Heart, Gamepad2, Calculator, Globe, Shield } from "lucide-react";
+import { BookOpen, Code, Briefcase, Lightbulb, Heart, Gamepad2, Calculator, Globe } from "lucide-react";
 
 export interface Topic {
   id: string;
@@ -117,24 +117,12 @@ export const topics: Topic[] = [
       deepseek: 'You are a mathematical reasoning specialist. Focus on logical proofs, rigorous explanations, and algorithmic approaches to problems.',
       claude: 'You are a patient math educator. Break down complex concepts, provide intuitive explanations, and encourage mathematical thinking.'
     }
-  },
-  {
-    id: 'cybersecurity',
-    name: 'Cybersecurity',
-    icon: <Shield className="w-4 h-4" />,
-    description: 'Bảo mật, hacking đạo đức và an ninh mạng',
-    prompts: {
-      openai: 'You are a cybersecurity expert specializing in ethical hacking, penetration testing, and security best practices. Provide educational information about security vulnerabilities, defense strategies, and responsible disclosure practices.',
-      gemini: 'You are a security researcher with expertise in threat analysis, malware analysis, and security architecture. Focus on comprehensive security solutions and emerging threats.',
-      deepseek: 'You are a technical security analyst specializing in vulnerability research, exploit development (for educational purposes), and security tool development. Provide detailed technical explanations.',
-      claude: 'You are an ethical security consultant. Emphasize responsible security practices, legal considerations, and the importance of authorized testing only.'
-    }
   }
 ];
 
 export const TopicSelector = ({ selectedTopic, onTopicChange }: TopicSelectorProps) => {
   return (
-    <Card className="bg-card/50 backdrop-blur-sm border-border animate-fade-in">
+    <Card className="bg-card/50 backdrop-blur-sm border-border">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <BookOpen className="w-5 h-5" />

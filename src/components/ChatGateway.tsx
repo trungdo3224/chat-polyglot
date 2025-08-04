@@ -25,13 +25,6 @@ interface SelectedModels {
   claude: boolean;
 }
 
-interface SelectedModelVersions {
-  openai: string;
-  gemini: string;
-  deepseek: string;
-  claude: string;
-}
-
 export const ChatGateway = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -44,12 +37,6 @@ export const ChatGateway = () => {
   });
   const [showApiKeys, setShowApiKeys] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(topics[0]); // Default to first topic
-  const [selectedModelVersions, setSelectedModelVersions] = useState<SelectedModelVersions>({
-    openai: 'gpt-4o',
-    gemini: 'gemini-1.5-pro',
-    deepseek: 'deepseek-chat',
-    claude: 'claude-3.5-sonnet',
-  });
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -79,7 +66,7 @@ export const ChatGateway = () => {
       
       const response: Message = {
         id: `${Date.now()}-${model}`,
-        content: `[${model.toUpperCase()}] - Model: ${selectedModelVersions[model as keyof SelectedModelVersions]}\nChủ đề: ${selectedTopic?.name}\n\nPrompt context: "${topicPrompt}"\n\nResponse to: "${userMessage.content}"\n\nĐây là phản hồi mô phỏng từ ${selectedModelVersions[model as keyof SelectedModelVersions]}. Khi tích hợp API thực tế, AI sẽ phản hồi theo prompt được tối ưu cho chủ đề "${selectedTopic?.name}".`,
+        content: `[${model.toUpperCase()}] - Chủ đề: ${selectedTopic?.name}\n\nPrompt context: "${topicPrompt}"\n\nResponse to: "${userMessage.content}"\n\nĐây là phản hồi mô phỏng. Khi tích hợp API thực tế, AI sẽ phản hồi theo prompt được tối ưu cho chủ đề "${selectedTopic?.name}".`,
         sender: "assistant",
         model,
         timestamp: new Date(),
@@ -130,8 +117,6 @@ export const ChatGateway = () => {
           <ModelSelector
             selectedModels={selectedModels}
             onModelChange={setSelectedModels}
-            selectedModelVersions={selectedModelVersions}
-            onModelVersionChange={setSelectedModelVersions}
           />
           
           {showApiKeys && (
@@ -141,9 +126,7 @@ export const ChatGateway = () => {
 
         {/* Chat Area */}
         <div className="flex-1 flex flex-col">
-          <Card className="flex-1 flex flex-col bg-card/50 backdrop-blur-sm border-border shadow-glow animate-fade-in"
-            style={{ animationDelay: '100ms' }}
-          >
+          <Card className="flex-1 flex flex-col bg-card/50 backdrop-blur-sm border-border shadow-glow">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
